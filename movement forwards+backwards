@@ -1,0 +1,57 @@
+# Moving Forwards
+
+from sr.robot3 import Robot, COMP, DEV, BRAKE
+import os
+
+robot = Robot()
+if robot.mode == COMP:
+    print("This is the competition!")
+elif robot.mode == DEV:
+    print("This is development")
+my_motor_board = robot.motor_board  # if you have only one board
+
+robot = Robot()
+print("The path to the USB stick is:", robot.usbkey)
+print("My file on the USB contains:")
+with open(os.path.join(robot.usbkey, 'my-file.txt')) as file:
+    print(file.read())
+
+# Full power forward
+my_motor_board.motors[0].power = 1    # left motor
+my_motor_board.motors[1].power = 1    # right motor
+
+robot.sleep(2)  # move forward for 2 seconds
+
+# Stop motors
+my_motor_board.motors[0].power = BRAKE
+my_motor_board.motors[1].power = BRAKE
+
+# Full power backward
+my_motor_board.motors[0].power = -1
+my_motor_board.motors[1].power = -1
+
+robot.sleep(2)  # move backward for 2 seconds
+
+# Stop motors
+my_motor_board.motors[0].power = BRAKE
+my_motor_board.motors[1].power = BRAKE
+
+my_motor_board.motors[0].power = 1     # left motor forward
+my_motor_board.motors[1].power = -1    # right motor backward
+
+robot.sleep(1.5)  # adjust for how much you want to turn
+
+my_motor_board.motors[0].power = BRAKE
+my_motor_board.motors[1].power = BRAKE
+
+my_motor_board.motors[0].power = -1    # left motor backward
+my_motor_board.motors[1].power = 1     # right motor forward
+
+robot.sleep(1.5)  # adjust as needed
+
+my_motor_board.motors[0].power = BRAKE
+my_motor_board.motors[1].power = BRAKE
+
+# Print the current in amps of motor 0 on board
+print(my_motor_board.motors[0].power)
+
